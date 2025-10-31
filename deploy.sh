@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ID=${PROJECT_ID:-healthcare-476114}
+PROJECT_ID=${PROJECT_ID:-YOUR_GCP_PROJECT_ID}
 REPOSITORY_NAME=${REPOSITORY_NAME:-healer-medgemma}
 SERVICE_NAME=${SERVICE_NAME:-healer-medgemma-service}
 REGION=${REGION:-europe-west1}

@@ -11,7 +11,7 @@ Healer packages the MedGemma 4B instruction-tuned model behind a FastAPI service
 | Variable | Purpose | Default |
 | --- | --- | --- |
 | `MY_HF_TOKEN` | Hugging Face token passed to Cloud Build and Docker | _required_ |
-| `PROJECT_ID` | Google Cloud project that hosts the container image | `healthcare-476114` |
+| `PROJECT_ID` | Google Cloud project that hosts the container image | `YOUR_GCP_PROJECT_ID` |
 | `REPOSITORY_NAME` | Container image name in Artifact Registry or GCR | `healer-medgemma` |
 | `MODEL_ID` | Hugging Face repo id to download during build | `google/medgemma-4b-it` |
 | `MODEL_DIR` | Destination directory for the downloaded model | `./medgemma-model` |
