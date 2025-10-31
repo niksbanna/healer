@@ -1,0 +1,20 @@
+substitutions:
+  _MY_HF_TOKEN: 'YOUR_HUGGINGFACE_TOKEN'
+  _PROJECT_ID: 'YOUR_GCP_PROJECT_ID'
+  _REPOSITORY_NAME: 'healer-medgemma'
+  _MODEL_ID: 'google/medgemma-4b-it'
+  _MODEL_DIR: './medgemma-model'
+
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '--build-arg', 'MY_HF_TOKEN=${_MY_HF_TOKEN}',
+    '--build-arg', 'MODEL_ID=${_MODEL_ID}',
+    '--build-arg', 'MODEL_DIR=${_MODEL_DIR}',
+    '-t', 'gcr.io/${_PROJECT_ID}/${_REPOSITORY_NAME}',
+    '.'
+  ]
+
+images:
+- 'gcr.io/${_PROJECT_ID}/${_REPOSITORY_NAME}'
