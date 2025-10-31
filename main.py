@@ -27,7 +27,7 @@ async def predict(image_file: UploadFile = File(...)):
     file_bytes = await image_file.read()
     my_image = Image.open(io.BytesIO(file_bytes))
 
-    my_question = "Is colorectal cancer present in this histopathology image? Answer with 'yes' or 'no' and provide a one-sentence explanation."
+    my_question = "<image>\nIs colorectal cancer present in this histopathology image? Answer with 'yes' or 'no' and provide a one-sentence explanation."
 
     my_inputs = my_processor(
         text=my_question,
