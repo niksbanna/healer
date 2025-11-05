@@ -171,7 +171,7 @@ const Index = () => {
         <header className="flex items-center justify-between p-3 sm:p-6 border-b border-border bg-card/80 backdrop-blur-sm">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-medical">
-              <img src="public/healer-logo.png" alt='healer-logo' />
+              <img src="/healer-logo.png" alt='healer-logo' />
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-foreground">Healer</h1>
