@@ -21,30 +21,30 @@ export const ChatMessage = ({ type, content, imageData }: ChatMessageProps) => {
     if (type === 'assistant') {
       const html = marked(content, { breaks: true });
       return (
-        <div 
-          className="prose prose-sm max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-code:text-primary"
-          dangerouslySetInnerHTML={{ __html: html }} 
+        <div
+          className="prose prose-sm sm:prose-base max-w-none prose-headings:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-code:text-primary text-sm sm:text-base"
+          dangerouslySetInnerHTML={{ __html: html }}
         />
       );
     }
-    return <p className="whitespace-pre-wrap">{content}</p>;
+    return <p className="whitespace-pre-wrap text-sm sm:text-base">{content}</p>;
   };
 
   return (
     <div
       ref={messageRef}
-      className={`flex gap-3 mb-4 animate-fade-in ${
+      className={`flex gap-2 sm:gap-3 mb-3 sm:mb-4 animate-fade-in ${
         type === 'user' ? 'justify-end' : 'justify-start'
       }`}
     >
       {type === 'assistant' && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md">
-          <Activity className="w-5 h-5 text-primary-foreground" />
+        <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md">
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
         </div>
       )}
-      
+
       <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 shadow-card ${
+        className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-3 py-2 sm:px-4 sm:py-3 shadow-card ${
           type === 'user'
             ? 'bg-primary text-primary-foreground'
             : type === 'error'
@@ -53,10 +53,10 @@ export const ChatMessage = ({ type, content, imageData }: ChatMessageProps) => {
         }`}
       >
         {imageData && (
-          <img 
-            src={imageData} 
-            alt="Uploaded medical image" 
-            className="max-w-full h-auto rounded-lg mb-2 shadow-sm"
+          <img
+            src={imageData}
+            alt="Uploaded medical image"
+            className="max-w-[200px] sm:max-w-xs max-h-32 sm:max-h-48 object-contain rounded-lg mb-2 shadow-sm"
           />
         )}
         {renderContent()}

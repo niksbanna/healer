@@ -62,12 +62,15 @@ const Index = () => {
           description: 'Please upload a PNG or JPEG image.',
           variant: 'destructive'
         });
+        e.target.value = '';
         return;
       }
 
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedImage(reader.result as string);
+        // Reset the input value after the file is read to allow selecting the same file again
+        e.target.value = '';
       };
       reader.readAsDataURL(file);
     }
@@ -147,12 +150,11 @@ const Index = () => {
   };
 
   const handlePromptClick = (prompt: string, triggerUpload?: boolean) => {
+    setInput(prompt);
     if (triggerUpload) {
       fileInputRef.current?.click();
-    } else {
-      setInput(prompt);
-      textareaRef.current?.focus();
     }
+    textareaRef.current?.focus();
   };
 
   return (
@@ -164,53 +166,54 @@ const Index = () => {
         }} />
       </div>
 
-      <div className="relative flex flex-col h-screen max-w-5xl mx-auto">
+      <div className="relative flex flex-col h-screen max-w-5xl mx-auto px-2 sm:px-4">
         {/* Header */}
-        <header className="flex items-center justify-between p-6 border-b border-border bg-card/80 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-medical">
-              <Activity className="w-7 h-7 text-primary-foreground" />
+        <header className="flex items-center justify-between p-3 sm:p-6 border-b border-border bg-card/80 backdrop-blur-sm">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-medical">
+              <img src="public/healer-logo.png" alt='healer-logo' />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Healer</h1>
-              <p className="text-sm text-muted-foreground">Powered by MedGemma</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground">Healer</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground">Powered by MedGemma</p>
             </div>
           </div>
-          
+
           {messages.length > 0 && (
             <Button
               variant="outline"
               size="sm"
               onClick={clearChatHistory}
-              className="gap-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+              className="gap-1 sm:gap-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 px-2 sm:px-3"
             >
-              <Trash2 className="w-4 h-4" />
-              Clear Chat
+              <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Clear Chat</span>
+              <span className="sm:hidden">Clear</span>
             </Button>
           )}
         </header>
 
         {/* Chat Area */}
-        <div 
+        <div
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto px-6 py-6 scroll-smooth"
+          className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 scroll-smooth"
         >
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full space-y-8 py-12">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-medical animate-pulse-glow">
-                <Activity className="w-12 h-12 text-primary-foreground" />
+            <div className="flex flex-col items-center justify-center h-full space-y-4 sm:space-y-8 py-6 sm:py-12">
+              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-medical animate-pulse-glow">
+                <Activity className="w-8 h-8 sm:w-12 sm:h-12 text-primary-foreground" />
               </div>
-              
-              <div className="text-center space-y-3 max-w-2xl">
-                <h2 className="text-3xl font-bold text-foreground">Welcome to Healer</h2>
-                <p className="text-muted-foreground text-lg">
-                  Your AI medical assistant powered by MedGemma. Ask questions about symptoms, 
+
+              <div className="text-center space-y-2 sm:space-y-3 max-w-2xl px-4">
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Welcome to Healer</h2>
+                <p className="text-muted-foreground text-sm sm:text-lg">
+                  Your AI medical assistant powered by MedGemma. Ask questions about symptoms,
                   medical conditions, or upload images for analysis.
                 </p>
               </div>
 
-              <div className="w-full max-w-3xl">
-                <p className="text-sm text-muted-foreground mb-4 text-center">Try these examples:</p>
+              <div className="w-full max-w-3xl px-4">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 text-center">Try these examples:</p>
                 <ExamplePrompts onPromptClick={handlePromptClick} />
               </div>
             </div>
@@ -230,13 +233,13 @@ const Index = () => {
         </div>
 
         {/* Input Footer */}
-        <div className="border-t border-border bg-card/80 backdrop-blur-sm p-6">
+        <div className="border-t border-border bg-card/80 backdrop-blur-sm p-3 sm:p-6">
           {selectedImage && (
-            <div className="mb-4 relative inline-block">
-              <img 
-                src={selectedImage} 
-                alt="Preview" 
-                className="max-w-xs h-32 object-cover rounded-lg border-2 border-primary shadow-medical"
+            <div className="mb-3 sm:mb-4 relative inline-block">
+              <img
+                src={selectedImage}
+                alt="Preview"
+                className="max-w-[200px] sm:max-w-xs h-24 sm:h-32 object-cover rounded-lg border-2 border-primary shadow-medical"
               />
               <Button
                 size="icon"
@@ -244,12 +247,12 @@ const Index = () => {
                 className="absolute -top-2 -right-2 w-6 h-6 rounded-full"
                 onClick={() => setSelectedImage(null)}
               >
-                <X className="w-4 h-4" />
+                <X className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
             </div>
           )}
 
-          <div className="flex gap-3 items-end">
+          <div className="flex gap-2 sm:gap-3 items-end">
             <input
               ref={fileInputRef}
               type="file"
@@ -257,14 +260,14 @@ const Index = () => {
               onChange={handleImageSelect}
               className="hidden"
             />
-            
+
             <Button
               variant="outline"
               size="icon"
               onClick={() => fileInputRef.current?.click()}
-              className="flex-shrink-0 hover:bg-primary/10 hover:border-primary/30"
+              className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 hover:bg-primary/10 hover:border-primary/30"
             >
-              <ImageIcon className="w-5 h-5 text-primary" />
+              <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </Button>
 
             <Textarea
@@ -273,22 +276,23 @@ const Index = () => {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe your symptoms or ask a medical question..."
-              className="min-h-[60px] max-h-[120px] resize-none focus:ring-primary"
+              className="min-h-[50px] sm:min-h-[60px] max-h-[100px] sm:max-h-[120px] resize-none focus:ring-primary text-sm sm:text-base"
               disabled={isLoading}
             />
 
             <Button
               onClick={sendMessage}
               disabled={(!input.trim() && !selectedImage) || isLoading}
-              className="flex-shrink-0 h-[60px] px-6 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-medical"
+              className="flex-shrink-0 h-[50px] sm:h-[60px] px-3 sm:px-6 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-medical"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
 
-          <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-            <p>Press <kbd className="px-2 py-1 bg-muted rounded">Enter</kbd> to send, <kbd className="px-2 py-1 bg-muted rounded">Shift + Enter</kbd> for new line</p>
-            <p className="text-right">⚠️ For informational purposes only. Consult a doctor for medical advice.</p>
+          <div className="mt-2 sm:mt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-muted-foreground">
+            <p className="hidden sm:block">Press <kbd className="px-2 py-1 bg-muted rounded">Enter</kbd> to send, <kbd className="px-2 py-1 bg-muted rounded">Shift + Enter</kbd> for new line</p>
+            <p className="sm:hidden text-xs">Press Enter to send</p>
+            <p className="text-left sm:text-right">⚠️ For informational purposes only. Consult a doctor for medical advice.</p>
           </div>
         </div>
       </div>
