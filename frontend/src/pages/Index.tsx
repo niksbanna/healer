@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { Activity, Send, ImageIcon, Trash2, X } from 'lucide-react';
+import { Activity, Send, ImageIcon, Trash2, X, Mic, MicOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ChatMessage } from '@/components/ChatMessage';
 import { TypingIndicator } from '@/components/TypingIndicator';
 import { ExamplePrompts } from '@/components/ExamplePrompts';
 import { useToast } from '@/hooks/use-toast';
+import { useSpeechToText } from '@/hooks/use-speech-to-text';
 
 interface Message {
   type: 'user' | 'assistant' | 'error';
@@ -24,6 +25,32 @@ const Index = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Speech-to-text hook
+  const {
+    isListening,
+    transcript,
+    startListening,
+    stopListening,
+    isSupported,
+  } = useSpeechToText({
+    onResult: (finalTranscript) => {
+      // When we get final results, append them to the input
+      setInput((prev) => {
+        const newText = prev ? `${prev} ${finalTranscript}` : finalTranscript;
+        return newText.trim();
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: 'Speech recognition error',
+        description: error,
+        variant: 'destructive'
+      });
+    },
+    continuous: true,
+    language: 'en-US',
+  });
 
   // Load chat history from localStorage
   useEffect(() => {
@@ -157,6 +184,23 @@ const Index = () => {
     textareaRef.current?.focus();
   };
 
+  const toggleSpeechRecognition = () => {
+    if (!isSupported) {
+      toast({
+        title: 'Not supported',
+        description: 'Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-doctor-bg to-medical-light">
       {/* Background pattern */}
@@ -268,6 +312,24 @@ const Index = () => {
               className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 hover:bg-primary/10 hover:border-primary/30"
             >
               <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleSpeechRecognition}
+              className={`flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 transition-all ${
+                isListening
+                  ? 'bg-red-500 hover:bg-red-600 border-red-500 text-white animate-pulse'
+                  : 'hover:bg-primary/10 hover:border-primary/30'
+              }`}
+              disabled={isLoading}
+            >
+              {isListening ? (
+                <MicOff className="w-4 h-4 sm:w-5 sm:h-5" />
+              ) : (
+                <Mic className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              )}
             </Button>
 
             <Textarea
